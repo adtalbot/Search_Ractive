@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Toptal Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Toptal Search</h1>
+      <div id="root">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" style="width: 100%">
+            Loading...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/html" id="tpl-app">
+      {{#partial skill}}
+        <a href="#" class="label label-primary" on-click="select-skill:{{this}}">{{this}}</a>
+      {{/partial}}
+
+      {{#partial skillsList}}
+        <div class="row">
+          <form class="form-horizontal col-xs-6 col-xs-offset-6">
+            <input type="search" class="form-control" value="{{ skillFilter }}" placeholder="Type part of the skill name here">
+          </form>
+        </div>
+        <hr>
+        <div class="row">
+          {{#each skills()}}
+          <span class="col-xs-3">
+            {{> skill}}
+          </span>
+          {{/each}}
+        </div>
+      {{/partial}}
+
+      {{#partial skillView}}
+        <h2>
+          {{ currentSkill }}
+          <button type="button" class="close pull-right" on-click="deselect-skill">&times; CLOSE</button>
+        </h2>
+
+        {{#each skillDevelopers(currentSkill)}}
+          <div class="panel panel-default">
+            <div class="panel-body media">
+              <div class="media-left">
+                <img class="media-object img-circle" width="64" height="64" src="{{ this.photo }}" alt="{{ this.name }}">
+              </div>
+              <div class="media-body">
+                <a class="h4 media-heading" href="{{ this.url }}" target="_blank">{{ this.name }}</a>
+                <p>
+                  {{ this.desc }}
+                </p>
+                <p>
+                  {{#each this.skills}}
+                    {{> skill}}&nbsp;
+                  {{/each}}
+                </p>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      {{/partial}}
+
+      {{#if currentSkill}}
+        {{> skillView}}
+      {{else}}
+        {{> skillsList}}
+      {{/if}}
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ractive/0.7.3/ractive.min.js"></script>
+    <script src="https://rawgit.com/emirotin/toptal-blog-ractive/master/data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
